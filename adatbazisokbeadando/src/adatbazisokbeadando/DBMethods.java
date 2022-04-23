@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
+import java.sql.Date;
 
 public class DBMethods {
 	
@@ -36,9 +36,10 @@ public class DBMethods {
 	
 	public void ReadAllDataTask() {
 		Connection conn = Connect();
-				String leiras ="", datum="", x= "\t";
+				String leiras ="",  x= "\t";
+				Date datum;
 				int tkod =0, Ekod=0, prioritas =0;
-				String sqlp ="select tkod,Ekod,leiras,datum,prioritas from task";
+				String sqlp ="select tkod,Ekod,leiras,datum,prioritas from Task";
 				try {
 					s = conn.createStatement();
 					rs= s.executeQuery(sqlp);
@@ -46,7 +47,7 @@ public class DBMethods {
 						tkod = rs.getInt("tkod");
 						Ekod = rs.getInt("Ekod");
 						leiras = rs.getString("leiras");
-						datum = rs.getString("datum");
+						datum = rs.getDate("datum");
 						prioritas = rs.getInt("prioritas");
 						
 						SM(tkod+x+Ekod+x +leiras+x+datum+x+prioritas );
@@ -112,9 +113,9 @@ public class DBMethods {
 		}
 		
 	}
-	public void InsertionTask(String tkod, String Ekod) {
+	public void InsertionTask(String tkod, String Ekod, String leiras, String datum, String prioritas) {
 		Connection conn = Connect();
-		String sqlp ="insert into task values("+tkod+",'"+Ekod+"')";
+		String sqlp ="insert into task values("+tkod+",'"+Ekod+"','"+leiras+"','"+datum+"', '"+prioritas+"')";
 		try {
 			Statement s = conn.createStatement();
 			s.execute(sqlp);
@@ -126,7 +127,7 @@ public class DBMethods {
 	}
 	public void DeleteData(String Kod) {
 		Connection conn = Connect();
-		SM("Melyik dolgozót töröljem?");
+	//	SM("Melyik dolgozót töröljem?");
 		String sqlp ="delete from dolgozo where kod like '"+Kod+"'";
 			try {
 			Statement s = conn.createStatement();
@@ -137,8 +138,36 @@ public class DBMethods {
 		}
 		
 	}
-	/*public void Modition(String nev) {
-		String sqlp ="update dolgozo set nev where '"+nev+"'";
+	
+	public void DeleteTask(String tkod) {
+		Connection conn = Connect();
+	
+		String sqlp ="delete from task where kod like '"+tkod+"'";
+			try {
+			Statement s = conn.createStatement();
+			s.execute(sqlp);
+			SM("törlés ok!");
+		} catch (SQLException e) {
+			SM("JDBC delete: "+e.getMessage());
+		}
+		
+	}
+	
+	public void Modition(String iq, String Kod) {
+		Connection conn = Connect();
+		//SM("Melyik dolgozó IQ-ját módosítsam?");
+		String sqlp ="UPDATE Dolgozo SET iq = "+iq+" WHERE Kod = "+Kod+"";
+		try { 
+			Statement s = conn.createStatement();
+			s.execute(sqlp);
+			SM("módosítás ok!");
+		} catch (SQLException e) {
+			SM("JDBC UpdateData: "+e.getMessage());
+		}
+		
+	}
+	public void ModitionTask(String tkod,String Ekod) {
+		String sqlp ="update dolgozo set Ekod = "+Ekod+" Where tkod = '"+tkod+"'";
 		try {
 			s = conn.createStatement();
 			s.execute(sqlp);
@@ -147,7 +176,7 @@ public class DBMethods {
 			SM("JDBC update: "+e.getMessage());
 		}
 		
-	}*/
+	}
 public void InsertWithPS(Dolgozo[] emp) {
 	Connection conn = Connect();
 		int pc=0;
@@ -157,7 +186,7 @@ public void InsertWithPS(Dolgozo[] emp) {
 			for(int i=0; i <emp.length;i++) {
 				ps.setInt(1, emp[i].getKod());
 				ps.setString(2, emp[i].getNev());
-				ps.setString(3, emp[i].getSzulido());
+				ps.setDate(3, emp[i].getSzulido());
 				ps.setString(4, emp[i].getLakohely());
 				ps.setInt(5, emp[i].getIq());
 				ps.execute();
@@ -172,7 +201,7 @@ public void InsertWithPS(Dolgozo[] emp) {
 public void IQList() {
 	Connection conn = Connect();
 	String nev; int iqq;
-	String sqlp =  "select nev, iq from dolgozo where iq >? and iq<= ?";
+	String sqlp =  "select nev, iq from dolgozo where iq > 10 and iq <= ?";
 	try {
 		PreparedStatement ps = conn.prepareStatement(sqlp);
 		

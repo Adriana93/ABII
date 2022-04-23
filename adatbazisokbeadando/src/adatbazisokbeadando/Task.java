@@ -1,14 +1,15 @@
 package adatbazisokbeadando;
+import java.sql.Date;
 
 public class Task {
 
 	private int tkod;
 	private int Ekod;
 	private String leiras;
-	private String datum;
+	private Date datum;
 	private int prioritas;
 	
-	public Task(int tkod, int Ekod, String leiras, String datum, int prioritas) {
+	public Task(int tkod, int Ekod, String leiras, Date datum, int prioritas) {
 		this.tkod = tkod;
 		this.Ekod =Ekod;
 		this.leiras = leiras;
@@ -41,11 +42,11 @@ public class Task {
 		this.leiras = leiras;
 	}
 
-	public String getDatum() {
+	public Date getDatum() {
 		return datum;
 	}
 
-	public void setDatum(String datum) {
+	public void setDatum(Date datum) {
 		this.datum = datum;
 	}
 

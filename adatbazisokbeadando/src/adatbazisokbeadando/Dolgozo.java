@@ -1,13 +1,15 @@
 package adatbazisokbeadando;
 
+import java.sql.Date;
+
 public class Dolgozo {
 	private int Kod;
 	private String nev;
-	private String szulido;
+	private Date szulido;
 	private String lakohely;
 	private int iq;
 	
-public Dolgozo(int kod, String nev, String szulido, String lakohely, int iq) {
+public Dolgozo(int kod, String nev, Date szulido, String lakohely, int iq) {
 	this.Kod = kod;
 	this.nev =nev;
 	this.szulido = szulido;
@@ -32,11 +34,11 @@ public void setNev(String nev) {
 	this.nev = nev;
 }
 
-public String getSzulido() {
+public Date getSzulido() {
 	return szulido;
 }
 
-public void setSzulido(String szulido) {
+public void setSzulido(Date szulido) {
 	this.szulido = szulido;
 }
 
